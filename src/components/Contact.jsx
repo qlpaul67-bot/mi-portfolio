@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Send, User, Mail, MessageSquare } from "lucide-react";
 import emailjs from "emailjs-com";
 
@@ -10,14 +10,20 @@ const Contact = () => {
     message: ""
   });
 
-  React.useEffect(() => {
-    setIsVisible(true);
+  useEffect(() => {
+    try {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    } catch (err) {
+      console.error("Error en animación inicial Contact:", err);
+      setIsVisible(true); // asegura que el contenido aparezca aunque falle
+    }
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Preparamos los datos para EmailJS
     const templateParams = {
       from_name: formData.name,
       from_email: formData.email,
@@ -25,10 +31,10 @@ const Contact = () => {
     };
 
     emailjs.send(
-      "service_noutldb",  // tu Service ID
-      "template_3aia7i6",  // tu Template ID
+      "service_noutldb",
+      "template_3aia7i6",
       templateParams,
-      "KNMeFg_IciVJSTeYe"    // tu Public Key
+      "KNMeFg_IciVJSTeYe"
     )
     .then(
       (response) => {
@@ -60,10 +66,8 @@ const Contact = () => {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-black opacity-[0.02] rounded-full blur-3xl"></div>
 
       <div className="max-w-6xl mx-auto w-full relative z-10">
-        
-        {/* Etiqueta superior */}
         <div className="text-center mb-6">
-          <span 
+          <span
             className="text-xs uppercase tracking-widest text-gray-500 font-light inline-block"
             style={{
               opacity: isVisible ? 1 : 0,
@@ -76,9 +80,8 @@ const Contact = () => {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
-          
           {/* IMAGEN */}
-          <div 
+          <div
             className="relative order-1 md:order-1"
             style={{
               opacity: isVisible ? 1 : 0,
@@ -88,19 +91,17 @@ const Contact = () => {
           >
             <div className="relative">
               <div className="absolute -inset-4 border-2 border-black rounded-2xl opacity-10 animate-pulse-slow"></div>
-              
               <img
                 src="/registro.png"
                 alt="Contacto"
                 className="w-64 h-64 md:w-72 md:h-72 object-cover rounded-2xl shadow-2xl border-4 border-black relative z-10 hover:scale-105 transition-transform duration-300"
               />
-              
               <div className="absolute -inset-2 border-2 border-black rounded-2xl opacity-5"></div>
             </div>
           </div>
 
           {/* FORMULARIO */}
-          <div 
+          <div
             className="w-full max-w-lg order-2 md:order-2"
             style={{
               opacity: isVisible ? 1 : 0,
@@ -109,12 +110,8 @@ const Contact = () => {
             }}
           >
             <div className="bg-white rounded-2xl shadow-[0_0_30px_rgba(0,0,0,0.15)] p-6 md:p-8 border border-gray-100">
-              <h2 className="text-3xl md:text-4xl font-black text-black mb-3 text-center">
-                CONTÁCTAME
-              </h2>
-              <p className="text-gray-600 text-center mb-6 text-sm">
-                ¿Tienes un proyecto en mente? ¡Hablemos! 💬
-              </p>
+              <h2 className="text-3xl md:text-4xl font-black text-black mb-3 text-center">CONTÁCTAME</h2>
+              <p className="text-gray-600 text-center mb-6 text-sm">¿Tienes un proyecto en mente? ¡Hablemos! 💬</p>
 
               <div className="mb-4 relative">
                 <label className="flex items-center gap-2 text-black font-bold mb-2 text-sm">
@@ -189,16 +186,9 @@ const Contact = () => {
 
       <style>{`
         @keyframes pulse-slow {
-          0%, 100% {
-            opacity: 0.1;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.15;
-            transform: scale(1.02);
-          }
+          0%, 100% { opacity: 0.1; transform: scale(1); }
+          50% { opacity: 0.15; transform: scale(1.02); }
         }
-
         .animate-pulse-slow {
           animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }

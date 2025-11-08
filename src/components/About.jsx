@@ -10,29 +10,41 @@ const About = () => {
   const [deleting, setDeleting] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
+  // Delay inicial para animaciones
   useEffect(() => {
-    // Pequeño delay para asegurar que la animación se ejecute al cargar
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-    return () => clearTimeout(timer);
+    try {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    } catch (err) {
+      console.error("Error en animación inicial About:", err);
+      setIsVisible(true); // asegura que el contenido aparezca aunque falle
+    }
   }, []);
 
+  // Animación de escritura de títulos
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (!deleting) {
-        setCurrentTitle(titles[titleIndex].substring(0, charIndex + 1));
-        setCharIndex(charIndex + 1);
-        if (charIndex + 1 === titles[titleIndex].length) setDeleting(true);
-      } else {
-        setCurrentTitle(titles[titleIndex].substring(0, charIndex - 1));
-        setCharIndex(charIndex - 1);
-        if (charIndex - 1 === 0) {
-          setDeleting(false);
-          setTitleIndex((titleIndex + 1) % titles.length);
+    let timeout;
+    try {
+      timeout = setTimeout(() => {
+        if (!deleting) {
+          setCurrentTitle(titles[titleIndex].substring(0, charIndex + 1));
+          setCharIndex(charIndex + 1);
+          if (charIndex + 1 === titles[titleIndex].length) setDeleting(true);
+        } else {
+          setCurrentTitle(titles[titleIndex].substring(0, charIndex - 1));
+          setCharIndex(charIndex - 1);
+          if (charIndex - 1 === 0) {
+            setDeleting(false);
+            setTitleIndex((titleIndex + 1) % titles.length);
+          }
         }
-      }
-    }, deleting ? 50 : 150);
+      }, deleting ? 50 : 150);
+    } catch (err) {
+      console.error("Error en animación de títulos About:", err);
+      setCurrentTitle(titles[titleIndex]); // muestra el título completo si falla
+    }
     return () => clearTimeout(timeout);
   }, [charIndex, deleting, titleIndex]);
 
@@ -46,9 +58,8 @@ const About = () => {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-black opacity-[0.02] rounded-full blur-3xl"></div>
 
       <div className="max-w-5xl mx-auto relative z-10">
-        {/* Etiqueta superior */}
         <div className="text-center mb-6">
-          <span 
+          <span
             className="text-xs uppercase tracking-widest text-gray-500 font-light inline-block"
             style={{
               opacity: isVisible ? 1 : 0,
@@ -61,12 +72,9 @@ const About = () => {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16">
-          
           {/* TEXTO */}
           <div className="text-center md:text-left max-w-xl order-2 md:order-1">
-            
-            {/* Título principal */}
-            <h1 
+            <h1
               className="text-4xl md:text-5xl font-black text-black mb-3"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -77,8 +85,7 @@ const About = () => {
               👋 Hola, soy <span className="inline-block">Paul</span>
             </h1>
 
-            {/* Subtítulo animado */}
-            <h2 
+            <h2
               className="text-2xl md:text-3xl font-bold text-gray-700 h-10 mb-4"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -90,8 +97,7 @@ const About = () => {
               <span className="border-r-2 border-black ml-1 animate-pulse"></span>
             </h2>
 
-            {/* Descripción */}
-            <p 
+            <p
               className="text-gray-600 leading-relaxed text-sm md:text-base mb-5"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -103,8 +109,7 @@ const About = () => {
               Me apasiona crear, aprender y llevar mis ideas a la realidad a través de la programación y la creatividad.
             </p>
 
-            {/* BOTONES */}
-            <div 
+            <div
               className="flex flex-col sm:flex-row gap-3 mb-5 justify-center md:justify-start"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -130,8 +135,7 @@ const About = () => {
               </a>
             </div>
 
-            {/* SEPARADOR */}
-            <div 
+            <div
               className="border-t border-gray-300 mb-4"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -140,8 +144,7 @@ const About = () => {
               }}
             ></div>
 
-            {/* REDES SOCIALES */}
-            <div 
+            <div
               className="flex space-x-5 justify-center md:justify-start text-black"
               style={{
                 opacity: isVisible ? 1 : 0,
@@ -149,47 +152,15 @@ const About = () => {
                 transition: 'all 0.8s ease-out 1.4s'
               }}
             >
-              <a 
-                href="https://github.com/qlpaul67-bot" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110"
-                title="GitHub"
-              >
-                <FaGithub size={18} />
-              </a>
-              <a 
-                href="https://www.facebook.com/shandee.roncal?locale=es_LA" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110"
-                title="Facebook"
-              >
-                <FaFacebook size={18} />
-              </a>
-              <a 
-                href="https://x.com/LPaul_05" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110"
-                title="Twitter"
-              >
-                <FaTwitter size={18} />
-              </a>
-              <a 
-                href="https://www.instagram.com/qlpaul67/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110"
-                title="Instagram"
-              >
-                <FaInstagram size={18} />
-              </a>
+              <a href="https://github.com/qlpaul67-bot" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110" title="GitHub"><FaGithub size={18} /></a>
+              <a href="https://www.facebook.com/shandee.roncal?locale=es_LA" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110" title="Facebook"><FaFacebook size={18} /></a>
+              <a href="https://x.com/LPaul_05" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110" title="Twitter"><FaTwitter size={18} /></a>
+              <a href="https://www.instagram.com/qlpaul67/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 flex items-center justify-center rounded-full border-2 border-black hover:bg-black hover:text-white transition-all duration-300 hover:scale-110" title="Instagram"><FaInstagram size={18} /></a>
             </div>
           </div>
 
           {/* IMAGEN */}
-          <div 
+          <div
             className="relative order-1 md:order-2"
             style={{
               opacity: isVisible ? 1 : 0,
@@ -198,16 +169,12 @@ const About = () => {
             }}
           >
             <div className="relative">
-              {/* Anillo decorativo animado */}
               <div className="absolute -inset-4 border-2 border-black rounded-full opacity-20 animate-ping"></div>
-              
               <img
                 src="/usuario.png"
                 alt="Jack Paul Ortega Roncal"
                 className="w-48 h-48 md:w-56 md:h-56 rounded-full object-cover shadow-2xl border-4 border-black relative z-10 hover:scale-105 transition-transform duration-300"
               />
-              
-              {/* Borde decorativo */}
               <div className="absolute -inset-2 border-2 border-black rounded-full opacity-10"></div>
             </div>
           </div>
@@ -217,23 +184,11 @@ const About = () => {
       {/* Estilos adicionales */}
       <style>{`
         @keyframes ping {
-          0% {
-            transform: scale(1);
-            opacity: 0.2;
-          }
-          50% {
-            transform: scale(1.1);
-            opacity: 0.1;
-          }
-          100% {
-            transform: scale(1.2);
-            opacity: 0;
-          }
+          0% { transform: scale(1); opacity: 0.2; }
+          50% { transform: scale(1.1); opacity: 0.1; }
+          100% { transform: scale(1.2); opacity: 0; }
         }
-
-        .animate-ping {
-          animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
+        .animate-ping { animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
       `}</style>
     </section>
   );

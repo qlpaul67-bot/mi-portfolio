@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-scroll";
 import { motion } from "framer-motion";
 import { FaHome, FaUser, FaProjectDiagram, FaEnvelope } from "react-icons/fa";
@@ -12,6 +12,19 @@ const navItems = [
 
 const Navbar = () => {
   const [active, setActive] = useState("home");
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    try {
+      const timer = setTimeout(() => setIsVisible(true), 100);
+      return () => clearTimeout(timer);
+    } catch (err) {
+      console.error("Error en visibilidad Navbar:", err);
+      setIsVisible(true); // asegura renderizado en móviles
+    }
+  }, []);
+
+  if (!isVisible) return null; // evita renderizar antes de tiempo
 
   return (
     <nav className="fixed w-full flex justify-center z-50 mt-4">
@@ -20,12 +33,12 @@ const Navbar = () => {
           <Link
             key={item.id}
             to={item.to}
-            spy={true} // Activa seguimiento de scroll
+            spy={true}
             smooth={true}
             duration={500}
-            offset={-50} // Ajusta si quieres un pequeño margen
+            offset={-50}
             className="relative cursor-pointer font-medium text-lg transition-colors duration-300"
-            onSetActive={() => setActive(item.to)} // Actualiza estado al hacer scroll
+            onSetActive={() => setActive(item.to)}
           >
             <motion.div
               className={`relative flex items-center space-x-2 justify-center px-3 py-1 rounded-2xl 

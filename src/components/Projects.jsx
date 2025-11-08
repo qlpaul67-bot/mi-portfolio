@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ExternalLink, Github, Eye } from "lucide-react";
 
 const projects = [
@@ -37,9 +37,17 @@ const projects = [
 const Projects = () => {
   const [filter, setFilter] = useState("All");
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Asegura renderizado inicial en móviles
+    const timer = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isVisible) return null; // evita render en blanco
 
   const categories = ["All", "Web", "Mobile"];
-
   const filteredProjects = filter === "All" 
     ? projects 
     : projects.filter(p => p.category === filter);
@@ -54,7 +62,6 @@ const Projects = () => {
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-black opacity-[0.02] rounded-full blur-3xl"></div>
 
       <div className="max-w-7xl mx-auto relative z-10 w-full">
-        
         {/* Header */}
         <div className="text-center mb-6">
           <div className="inline-block mb-2">
@@ -88,17 +95,17 @@ const Projects = () => {
         </div>
 
         {/* Grid de Proyectos */}
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 justify-items-center">
-  {filteredProjects.map((project, index) => (
-    <div
-      key={index}
-      onMouseEnter={() => setHoveredIndex(index)}
-      onMouseLeave={() => setHoveredIndex(null)}
-      className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 w-72 md:w-72"
-      style={{
-        animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
-      }}
-    >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 justify-items-center">
+          {filteredProjects.map((project, index) => (
+            <div
+              key={index}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 w-72 md:w-72"
+              style={{
+                animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
+              }}
+            >
               {/* Imagen con overlay */}
               <div className="relative h-48 overflow-hidden bg-gray-100">
                 <img
@@ -107,7 +114,7 @@ const Projects = () => {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 
-                {/* Overlay oscuro al hacer hover */}
+                {/* Overlay oscuro al hacer hover o touch */}
                 <div 
                   className="absolute inset-0 bg-black transition-opacity duration-500"
                   style={{
@@ -115,7 +122,7 @@ const Projects = () => {
                   }}
                 ></div>
 
-                {/* Botones de acción (aparecen en hover) */}
+                {/* Botones de acción (aparecen en hover o en touch) */}
                 <div 
                   className="absolute inset-0 flex items-center justify-center gap-3 transition-all duration-500"
                   style={{
@@ -197,8 +204,6 @@ const Projects = () => {
             </div>
           ))}
         </div>
-
-        
       </div>
 
       {/* Estilos de animación */}

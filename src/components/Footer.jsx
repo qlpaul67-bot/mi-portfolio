@@ -3,12 +3,17 @@ import { FaGithub, FaFacebook, FaTwitter, FaInstagram, FaArrowUp, FaEnvelope, Fa
 
 const Footer = () => {
   const [showButton, setShowButton] = useState(false);
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     const handleScroll = () => {
       setShowButton(window.scrollY > 300);
     };
     window.addEventListener("scroll", handleScroll);
+
+    // For mobile initial check
+    handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -16,15 +21,13 @@ const Footer = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const currentYear = new Date().getFullYear();
-
   return (
     <>
       <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-200 pt-16 pb-8 mt-20 relative overflow-hidden">
         {/* Decoración de fondo */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl"></div>
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
+          <div className="absolute top-0 left-0 w-72 h-72 sm:w-96 sm:h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-72 h-72 sm:w-96 sm:h-96 bg-purple-500 rounded-full filter blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -48,36 +51,17 @@ const Footer = () => {
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-white mb-4">Enlaces Rápidos</h3>
               <ul className="space-y-3">
-                <li>
-                  <a href="#home" className="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group">
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-blue-400 transition-all duration-300"></span>
-                    <span>Inicio</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#about" className="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group">
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-blue-400 transition-all duration-300"></span>
-                    <span>Sobre Mí</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#projects" className="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group">
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-blue-400 transition-all duration-300"></span>
-                    <span>Proyectos</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#skills" className="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group">
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-blue-400 transition-all duration-300"></span>
-                    <span>Habilidades</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#contact" className="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group">
-                    <span className="w-0 group-hover:w-2 h-0.5 bg-blue-400 transition-all duration-300"></span>
-                    <span>Contacto</span>
-                  </a>
-                </li>
+                {["home","about","projects","skills","contact"].map((section) => (
+                  <li key={section}>
+                    <a
+                      href={`#${section}`}
+                      className="text-gray-400 hover:text-blue-400 transition-colors duration-300 flex items-center space-x-2 group"
+                    >
+                      <span className="w-0 group-hover:w-2 h-0.5 bg-blue-400 transition-all duration-300"></span>
+                      <span className="capitalize">{section === "about" ? "Sobre Mí" : section}</span>
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -86,19 +70,19 @@ const Footer = () => {
               <h3 className="text-xl font-bold text-white mb-4">Servicios</h3>
               <ul className="space-y-3">
                 <li className="flex items-center space-x-3 text-gray-400">
-                  <FaLaptopCode className="text-blue-400 text-xl" />
+                  <FaLaptopCode className="text-blue-400 text-xl flex-shrink-0" />
                   <span>Desarrollo Web</span>
                 </li>
                 <li className="flex items-center space-x-3 text-gray-400">
-                  <FaPalette className="text-purple-400 text-xl" />
+                  <FaPalette className="text-purple-400 text-xl flex-shrink-0" />
                   <span>Diseño UI/UX</span>
                 </li>
                 <li className="flex items-center space-x-3 text-gray-400">
-                  <FaCode className="text-green-400 text-xl" />
+                  <FaCode className="text-green-400 text-xl flex-shrink-0" />
                   <span>Desarrollo Frontend</span>
                 </li>
                 <li className="flex items-center space-x-3 text-gray-400">
-                  <FaCode className="text-yellow-400 text-xl" />
+                  <FaCode className="text-yellow-400 text-xl flex-shrink-0" />
                   <span>Desarrollo Backend</span>
                 </li>
               </ul>
@@ -110,7 +94,7 @@ const Footer = () => {
               <ul className="space-y-4">
                 <li className="flex items-start space-x-3 text-gray-400">
                   <FaEnvelope className="text-blue-400 mt-1 flex-shrink-0" />
-                  <a href="mailto:qlpaul67@gmail.com" className="hover:text-blue-400 transition-colors duration-300">
+                  <a href="mailto:qlpaul67@gmail.com" className="hover:text-blue-400 transition-colors duration-300 break-words">
                     qlpaul67@gmail.com
                   </a>
                 </li>
@@ -123,8 +107,6 @@ const Footer = () => {
                   <span>Pichanaki, Perú</span>
                 </li>
               </ul>
-
-              
             </div>
           </div>
 
@@ -133,10 +115,9 @@ const Footer = () => {
 
           {/* Sección inferior */}
           <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
-            
             {/* Copyright */}
             <div className="text-gray-400 text-sm text-center md:text-left">
-              <p className="flex items-center justify-center md:justify-start space-x-2">
+              <p className="flex items-center justify-center md:justify-start space-x-2 flex-wrap">
                 <span>© {currentYear} PaúL O.R. Hecho con</span>
                 <FaHeart className="text-red-500 animate-pulse" />
                 <span>y mucho código</span>
@@ -145,45 +126,26 @@ const Footer = () => {
             </div>
 
             {/* Redes Sociales */}
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-6 flex-wrap justify-center md:justify-end">
               <span className="text-gray-400 text-sm hidden md:block">Sígueme en:</span>
-              <div className="flex space-x-4">
-                <a
-                  href="https://github.com/qlpaul67-bot"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-blue-500/50"
-                  aria-label="GitHub"
-                >
-                  <FaGithub className="text-xl" />
-                </a>
-                <a
-                  href="https://www.facebook.com/shandee.roncal?locale=es_LA"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-600 text-gray-400 hover:text-white transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-blue-500/50"
-                  aria-label="Facebook"
-                >
-                  <FaFacebook className="text-xl" />
-                </a>
-                <a
-                  href="https://x.com/LPaul_05"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-400 text-gray-400 hover:text-white transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-blue-400/50"
-                  aria-label="Twitter"
-                >
-                  <FaTwitter className="text-xl" />
-                </a>
-                <a
-                  href="https://www.instagram.com/qlpaul67/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 text-gray-400 hover:text-white transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-pink-500/50"
-                  aria-label="Instagram"
-                >
-                  <FaInstagram className="text-xl" />
-                </a>
+              <div className="flex space-x-4 flex-wrap justify-center">
+                {[
+                  { href:"https://github.com/qlpaul67-bot", icon:FaGithub },
+                  { href:"https://www.facebook.com/shandee.roncal?locale=es_LA", icon:FaFacebook },
+                  { href:"https://x.com/LPaul_05", icon:FaTwitter },
+                  { href:"https://www.instagram.com/qlpaul67/", icon:FaInstagram }
+                ].map(({href, icon: Icon}, i) => (
+                  <a
+                    key={i}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 text-gray-400 hover:text-white transform hover:scale-110 hover:-translate-y-1 transition-all duration-300 shadow-lg"
+                    aria-label="Red social"
+                  >
+                    <Icon className="text-xl" />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
@@ -194,7 +156,7 @@ const Footer = () => {
       {showButton && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl text-xl z-50 transform hover:scale-110 transition-all duration-300 animate-bounce"
+          className="fixed bottom-8 right-4 sm:right-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl text-xl z-50 transform hover:scale-110 transition-all duration-300 animate-bounce"
           aria-label="Volver arriba"
         >
           <FaArrowUp />

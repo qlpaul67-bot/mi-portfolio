@@ -7,10 +7,9 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
 function App() {
-  // Estado para dark mode
   const [darkMode, setDarkMode] = useState(false);
 
-  // Inicializamos dark mode solo en el cliente
+  // Inicializa darkMode desde localStorage solo en cliente
   useEffect(() => {
     try {
       const savedTheme = localStorage.getItem("theme");
@@ -28,7 +27,7 @@ function App() {
     }
   }, []);
 
-  // Actualizamos dark mode cuando cambie
+  // Actualiza darkMode y localStorage
   useEffect(() => {
     try {
       if (darkMode) {
